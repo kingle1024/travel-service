@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.travel.api.vo.Product;
+import com.travel.api.vo.Region;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByProductCdIn(List<String> productCds);
+public interface RegionRepository extends JpaRepository<Region, Long> {
+
+    List<Region> findByRegionCdIn(List<String> regionCd);
 }
