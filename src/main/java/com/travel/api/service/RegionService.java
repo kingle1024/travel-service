@@ -1,5 +1,6 @@
 package com.travel.api.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,15 @@ public class RegionService {
     }
 
     public List<Region> getRegions() {
-        return regionRepository.findAll();
+        List<Object[]> results = regionRepository.findAllGroupByRegionCdAndRegionNm();
+        List<Region> regions = new ArrayList<>();
+        for (Object[] result : results) {
+            Region region = new Region();
+            region.setRegionCd((String) result[0]);
+            region.setRegionNm((String) result[1]);
+            regions.add(region);
+        }
+
+        return regions;
     }
 }
