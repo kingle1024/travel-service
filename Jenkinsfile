@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/kingle1024/travel-service.git'
+                git branch: 'main', url: 'https://github.com/kingle1024/travel-service.git'
             }
         }
         stage('Build') {
