@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        // Gradle 실행 파일의 경로를 환경 변수로 설정
+        GRADLE_HOME = '/opt/gradle/gradle-{version}/bin'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -9,17 +14,17 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'gradle clean build' // Gradle을 사용한 빌드
+                sh '$GRADLE_HOME/gradle clean build' // Gradle을 사용한 빌드
             }
         }
         stage('Test') {
             steps {
-                sh 'gradle test' // Gradle을 사용한 테스트 실행
+                sh '$GRADLE_HOME/gradle test' // Gradle을 사용한 테스트 실행
             }
         }
         stage('Deploy') {
             steps {
-                sh 'gradle deploy' // Gradle을 사용한 배포
+                sh '$GRADLE_HOME/gradle deploy' // Gradle을 사용한 배포
             }
         }
     }
