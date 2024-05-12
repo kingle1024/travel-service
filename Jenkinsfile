@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Gradle 실행 파일의 경로를 환경 변수로 설정
-        GRADLE_HOME = '/opt/gradle/gradle-{version}/bin'
+        GRADLE_HOME = '/opt/gradle/gradle-8.7/bin'
     }
 
     stages {
