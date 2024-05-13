@@ -36,6 +36,6 @@ tasks.named('test') {
 
 springBoot {
 	buildInfo {
-		mainClassName = 'com.travel.api.TravelApplication'
+		mainClass = 'com.travel.api.TravelApplication'
 	}
 }
