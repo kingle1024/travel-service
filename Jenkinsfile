@@ -19,11 +19,12 @@ pipeline {
         }
         stage('Deploy') {
             steps {
+                sh '''
                 cp /var/lib/jenkins/workspace/git-pipeline/build/libs/travel-service-0.0.1-SNAPSHOT-plain.jar /server/build/
 
                 echo "PID Check..."
 
-                CURRENT_PID=$(ps -ef | grep java | grep gradle-springboot-test* | awk '{print $2}')
+                CURRENT_PID=$(ps -ef | grep java | grep gradle-springboot-test* | awk \'{print $2}\')
 
                 echo "Running PID: {$CURRENT_PID}"
 
@@ -38,7 +39,7 @@ pipeline {
 
                 nohup java -jar /server/build/travel-service-0.0.1-SNAPSHOT-plain.jar >> /server/logs/travel-service.log &
 
-                echo "Done"
+                echo "Done"'''
             }
         }
     }
