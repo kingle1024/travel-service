@@ -31,13 +31,13 @@ pipeline {
                 if "$CURRENT_PID" [ -z CURRENT_PID ] ; then
                 	echo "Project is not running"
                 else
-                	kill -9 $CURRENT_PID
-                	sleep 10
+                	sudo kill -9 $CURRENT_PID
+                	sudo sleep 10
                 fi
 
                 echo "Deploy Project...."
 
-                nohup java -jar /server/build/travel-service-0.0.1-SNAPSHOT-plain.jar >> /server/logs/travel-service.log &
+                sudo nohup java -jar /server/build/travel-service-0.0.1-SNAPSHOT-plain.jar >> /server/logs/travel-service.log &
 
                 echo "Done"'''
             }
