@@ -20,7 +20,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                sudo cp /var/lib/jenkins/workspace/git-pipeline/build/libs/travel-service-0.0.1-SNAPSHOT-plain.jar /server/build/
+                sudo cp /var/lib/jenkins/workspace/git-pipeline/build/libs/travel-service-0.0.1-SNAPSHOT.jar /server/build/
 
                 echo "PID Check..."
 
@@ -38,7 +38,7 @@ pipeline {
 
                 echo "Deploy Project...."
 
-                sudo nohup java -jar /server/build/travel-service-0.0.1-SNAPSHOT-plain.jar
+                sudo nohup java -jar /server/build/travel-service-0.0.1-SNAPSHOT.jar
 
                 echo "Done"'''
             }
