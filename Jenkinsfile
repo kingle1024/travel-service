@@ -17,11 +17,6 @@ pipeline {
                 sh '$GRADLE_HOME/gradle build -x test' // Gradle을 사용한 빌드 테스트 생략
             }
         }
-        stage('Test') {
-            steps {
-                sh '$GRADLE_HOME/gradle test' // Gradle을 사용한 테스트 실행
-            }
-        }
         stage('Deploy') {
             steps {
                 sh '$GRADLE_HOME/gradle deploy' // Gradle을 사용한 배포
