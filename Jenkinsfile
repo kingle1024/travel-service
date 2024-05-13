@@ -28,8 +28,13 @@ pipeline {
 
                 echo "Running PID: {$CURRENT_PID}"
 
-                sudo kill -9 $CURRENT_PID
-                sudo sleep 10
+                if [ -z $CURRENT_PID ]
+                then
+                	echo "Project is not running"
+                else
+                	sudo kill -9 $CURRENT_PID
+                	sudo sleep 10
+                fi
 
                 echo "Deploy Project...."
 
