@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                cp /var/lib/jenkins/build/libs/travel-service-0.0.1-SNAPSHOT-plain.jar /server/build/
+                cp /var/lib/jenkins/workspace/git-pipeline/build/libs/travel-service-0.0.1-SNAPSHOT-plain.jar /server/build/
 
                 echo "PID Check..."
 
