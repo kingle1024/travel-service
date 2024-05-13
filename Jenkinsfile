@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh '$GRADLE_HOME/gradle clean build -x test' // Gradle을 사용한 빌드 테스트 생략
+                sh '$GRADLE_HOME/gradle build -x test' // Gradle을 사용한 빌드 테스트 생략
             }
         }
         stage('Test') {
