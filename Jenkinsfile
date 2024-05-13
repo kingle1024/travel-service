@@ -19,7 +19,26 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh '$GRADLE_HOME/gradle deploy' // Gradle을 사용한 배포
+                cp /var/lib/jenkins/build/libs/travel-service-0.0.1-SNAPSHOT-plain.jar /server/build/
+
+                echo "PID Check..."
+
+                CURRENT_PID=$(ps -ef | grep java | grep gradle-springboot-test* | awk '{print $2}')
+
+                echo "Running PID: {$CURRENT_PID}"
+
+                if "$CURRENT_PID" [ -z CURRENT_PID ] ; then
+                	echo "Project is not running"
+                else
+                	kill -9 $CURRENT_PID
+                	sleep 10
+                fi
+
+                echo "Deploy Project...."
+
+                nohup java -jar /server/build/travel-service-0.0.1-SNAPSHOT-plain.jar >> /server/logs/travel-service.log &
+
+                echo "Done"
             }
         }
     }
