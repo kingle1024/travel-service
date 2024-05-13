@@ -24,7 +24,7 @@ pipeline {
 
                 echo "PID Check..."
 
-                CURRENT_PID=$(ps -ef | grep java | grep gradle-springboot-test* | awk \'{print $2}\')
+                CURRENT_PID=$(ps -ef | grep java | grep travel-service* | awk \'{print $2}\')
 
                 echo "Running PID: {$CURRENT_PID}"
 
