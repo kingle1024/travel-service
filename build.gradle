@@ -33,3 +33,7 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+springBoot {
+	mainClassName = 'com.travel.api.controller.ProductController' // 실제 메인 클래스의 패키지 및 클래스 이름으로 변경해야 합니다.
+}
