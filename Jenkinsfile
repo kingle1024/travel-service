@@ -38,7 +38,7 @@ pipeline {
 
                 echo "Deploy Project...."
 
-                sudo nohup java -jar /server/build/travel-service-0.0.1-SNAPSHOT-plain.jar >> /server/logs/travel-service.log &
+                sudo nohup java -jar /server/build/travel-service-0.0.1-SNAPSHOT-plain.jar
 
                 echo "Done"'''
             }
