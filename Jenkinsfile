@@ -15,30 +15,17 @@ pipeline {
         stage('Build') {
             steps {
                 sh '$GRADLE_HOME/gradle build bootJar -x test' // Gradle을 사용한 빌드 테스트 생략
+                sh 'sudo cp /var/lib/jenkins/workspace/git-pipeline/build/libs/travel-service-0.0.1-SNAPSHOT.jar /server/build/' // 빌드파일 복사
             }
         }
         stage('Deploy') {
             steps {
                 sh '''
-                sudo cp /var/lib/jenkins/workspace/git-pipeline/build/libs/travel-service-0.0.1-SNAPSHOT.jar /server/build/
+                sh /server/launcher/travel-service-shutdown.sh
 
-                echo "PID Check..."
+                sudo sleep 10
 
-                CURRENT_PID=$(ps -ef | grep java | grep travel-service* | awk \'{print $2}\')
-
-                echo "Running PID: {$CURRENT_PID}"
-
-                if [ -z $CURRENT_PID ]
-                then
-                	echo "Project is not running"
-                else
-                	sudo kill -9 $CURRENT_PID
-                	sudo sleep 10
-                fi
-
-                echo "Deploy Project...."
-
-                sudo nohup java -jar /server/build/travel-service-0.0.1-SNAPSHOT.jar
+                sh /server/launcher/travel-service-startup.sh
 
                 echo "Done"'''
             }
