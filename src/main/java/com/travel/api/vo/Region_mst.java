@@ -15,17 +15,17 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "product")
+@Table(name = "region_mst")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Product {
+public class Region_mst {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String title;
-
-    private String url;
-    private String productCd;
+    private String regionCd;
+    private String LEVEL1;
+    private String LEVEL2;
+    private String LEVEL3;
+    private String LEVEL4;
 }

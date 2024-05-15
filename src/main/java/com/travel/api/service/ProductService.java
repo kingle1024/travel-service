@@ -12,49 +12,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.travel.api.repository.ProductRepository;
 import com.travel.api.repository.RegionRepository;
-import com.travel.api.vo.Product;
-import com.travel.api.vo.Region;
+import com.travel.api.vo.Product_mst;
+import com.travel.api.vo.Region_mst;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final RegionRepository regionRepository;
-    private final EntityManager entityManager;
     @Autowired
     public ProductService(ProductRepository productRepository, RegionRepository regionRepository, EntityManager entityManager) {
         this.productRepository = productRepository;
         this.regionRepository = regionRepository;
-        this.entityManager = entityManager;
     }
 
-    public List<Product> getProducts(String regionCd) {
+    public List<Product_mst> getProducts(String regionCd) {
 
         if(isEmpty(regionCd)) {
             return productRepository.findAll();
         } else {
             // regionCd를 이용하여 Region을 조회
-            List<Region> regions = regionRepository.findByRegionCdIn(Arrays.asList(regionCd.split("\\|")));
+            List<Region_mst> regionMsts = regionRepository.findByRegionCdIn(Arrays.asList(regionCd.split("\\|")));
 
             // region이 null이면 해당 regionCd에 매칭되는 데이터가 없는 것으로 처리
-            if (regions == null) {
+            if (regionMsts == null) {
                 return Collections.emptyList();
             }
 
             List<String> productCds = new ArrayList<>();
-            for(Region item : regions) {
-                productCds.add(item.getProductCd());
+            for(Region_mst item : regionMsts) {
+                productCds.add(item.getLEVEL4());
             }
 
             return productRepository.findByProductCdIn(productCds);
         }
     }
 
-    public void save(Product product) {
-        productRepository.save(product);
+    public void save(Product_mst productMst) {
+        productRepository.save(productMst);
     }
 
-    public Product findById(long id) {
-        Optional<Product> byId = productRepository.findById(id);
+    public Product_mst findById(long id) {
+        Optional<Product_mst> byId = productRepository.findById(id);
         return byId.orElse(null);
     }
 }

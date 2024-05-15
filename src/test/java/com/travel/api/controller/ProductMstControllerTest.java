@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.containsString;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ProductControllerTest {
+class ProductMstControllerTest {
     @Autowired
     private MockMvc mockMvc;
 

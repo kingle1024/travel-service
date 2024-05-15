@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.travel.api.service.ProductService;
 import com.travel.api.service.RegionService;
-import com.travel.api.vo.Product;
+import com.travel.api.vo.Product_mst;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,25 +35,26 @@ public class ProductController {
     ) {
         Map<String, Object> items = new HashMap<>();
         items.put("product", productService.getProducts(regionCd));
-        items.put("region", regionService.getRegions());
+        items.put("region2", regionService.getRegions2());
+        items.put("region4", regionService.getRegions4());
 
         return ResponseEntity.ok(items);
     }
 
     @GetMapping("/save")
     public void save() {
-        Product product = Product.builder()
+        Product_mst productMst = Product_mst.builder()
             .title("random_" + UUID.randomUUID().toString().substring(0, 5))
             .build();
 
-        productService.save(product);
+        productService.save(productMst);
     }
 
     @GetMapping("/edit")
     public void edit() {
-        Product product = productService.findById(1L);
-        product.setTitle("edit"+ UUID.randomUUID().toString().substring(0, 5));
+        Product_mst productMst = productService.findById(1L);
+        productMst.setTitle("edit"+ UUID.randomUUID().toString().substring(0, 5));
 
-        productService.save(product);
+        productService.save(productMst);
     }
 }
