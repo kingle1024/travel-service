@@ -1,18 +1,23 @@
 package com.travel.api.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.travel.api.service.ProductLinkService;
 import com.travel.api.service.ProductService;
 import com.travel.api.service.RegionService;
 import com.travel.api.vo.Product_mst;
+import com.travel.api.vo.Region_mst;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,22 +26,41 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductLinkService productLinkService;
     private final RegionService regionService;
 
     @Autowired
-    public ProductController(ProductService productService, RegionService regionService) {
+    public ProductController(ProductService productService, ProductLinkService productLinkService, RegionService regionService) {
         this.productService = productService;
+        this.productLinkService = productLinkService;
         this.regionService = regionService;
     }
 
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> list (
-        @RequestParam(required = false) String regionCd
+        @RequestParam(required = false) String level2,
+        @RequestParam(required = false) String level4
     ) {
+
         Map<String, Object> items = new HashMap<>();
-        items.put("product", productService.getProducts(regionCd));
-        items.put("region2", regionService.getRegions2());
-        items.put("region4", regionService.getRegions4());
+        List<String> level2List = null;
+        if (level2 != null && !level2.isEmpty()) {
+            level2List = Arrays.asList(level2.split("\\|"));
+        }
+        List<String> level4List = null;
+        if (level4 != null && !level4.isEmpty()) {
+            level4List = Arrays.asList(level4.split("\\|"));
+        }
+
+        List<Region_mst> regions2 = regionService.getRegions2();
+        List<Region_mst> regions4 = regionService.getRegions4(level2List);
+
+        items.put("region2", regions2);
+        items.put("region4", regions4);
+
+        List<String> regionCdsList = regionService.getRegionCds(level2List, level4List);
+        List<String> productCds = productLinkService.getProductCdByRegionCd(regionCdsList);
+        items.put("product", productService.getProducts(productCds));
 
         return ResponseEntity.ok(items);
     }
