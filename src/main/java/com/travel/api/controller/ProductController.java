@@ -3,14 +3,13 @@ package com.travel.api.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.travel.api.service.ProductLinkService;
@@ -18,7 +17,6 @@ import com.travel.api.service.ProductService;
 import com.travel.api.service.RegionService;
 import com.travel.api.vo.Product_mst;
 import com.travel.api.vo.Region_mst;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -80,5 +78,15 @@ public class ProductController {
         productMst.setTitle("edit"+ UUID.randomUUID().toString().substring(0, 5));
 
         productService.save(productMst);
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<Product_mst> detail(@PathVariable Long id) {
+        Product_mst product = productService.findById(id);
+        if(product == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(product);
+        }
     }
 }

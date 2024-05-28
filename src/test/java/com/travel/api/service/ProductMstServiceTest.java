@@ -30,7 +30,7 @@ class ProductMstServiceTest {
 
     @Test
     public void list() {
-        ProductService productService = new ProductService(productRepository, regionRepository, entityManager);
+        ProductService productService = new ProductService(productRepository);
         List<Product_mst> productMsts = productService.getProducts(Collections.emptyList());
 
         assertThat(productMsts).isNotNull();
