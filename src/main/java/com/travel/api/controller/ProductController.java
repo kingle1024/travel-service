@@ -1,6 +1,5 @@
 package com.travel.api.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -81,12 +80,20 @@ public class ProductController {
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<Product_mst> detail(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> detail(@PathVariable Long id) {
         Product_mst product = productService.findById(id);
+        // List<REGION_CD>를 가져온다.
+        List<String> regionCds = productLinkService.getProductCdByProductCd(String.valueOf(id));
+        // x, y좌표를 가져온다.
+        List<Region_mst> regions = regionService.getRegionMstsByRegionCds(regionCds);
+        Map<String, Object> results = new HashMap<>();
+        results.put("product", product);
+        results.put("regions", regions);
+
         if(product == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(product);
+            return ResponseEntity.ok(results);
         }
     }
 }

@@ -16,7 +16,7 @@ public class ProductLinkRepositoryImpl implements ProductLinkRepository {
 
     @Autowired
     public ProductLinkRepositoryImpl(EntityManager entityManager) {
-        this.queryFactory = new JPAQueryFactory(entityManager);;
+        this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
     @Override
@@ -26,5 +26,14 @@ public class ProductLinkRepositoryImpl implements ProductLinkRepository {
                 .from(product_link)
                 .where(product_link.regionCd.in(regionCds))
                 .fetch();
+    }
+
+    @Override
+    public List<String> findByProductCd(String productCd) {
+        return queryFactory
+            .select(product_link.regionCd)
+            .from(product_link)
+            .where(product_link.productCd.eq(productCd))
+            .fetch();
     }
 }

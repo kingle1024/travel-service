@@ -13,7 +13,7 @@ import com.travel.api.vo.Region_mst;
 
 @Service
 public class RegionService {
-    private RegionRepositoryImpl regionRepository;
+    private final RegionRepositoryImpl regionRepository;
 
     @Autowired
     public RegionService(RegionRepositoryImpl regionRepository) {
@@ -50,5 +50,9 @@ public class RegionService {
 
     public List<String> getRegionCds(List<String> level2List, List<String> level4List) {
         return regionRepository.findRegionCdsByLevel(level2List, level4List);
+    }
+
+    public List<Region_mst> getRegionMstsByRegionCds(List<String> regionCds) {
+        return regionRepository.findByRegionCdIn(regionCds);
     }
 }

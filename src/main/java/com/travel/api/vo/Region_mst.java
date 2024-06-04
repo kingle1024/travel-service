@@ -28,4 +28,7 @@ public class Region_mst {
     private String LEVEL2;
     private String LEVEL3;
     private String LEVEL4;
+    private String lat;
+    private String lng;
+    private String title;
 }

@@ -44,6 +44,7 @@ public class RegionRepositoryImpl implements RegionRepository {
         return queryFactory
                 .select(region_mst)
                 .from(region_mst)
+                .where(region_mst.regionCd.in(items))
                 .fetch();
     }
 
