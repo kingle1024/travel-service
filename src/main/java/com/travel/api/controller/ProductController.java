@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.travel.api.service.CommentService;
 import com.travel.api.service.ProductLinkService;
 import com.travel.api.service.ProductService;
 import com.travel.api.service.RegionService;
+import com.travel.api.vo.Comment_mst;
 import com.travel.api.vo.Product_mst;
 import com.travel.api.vo.Region_mst;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +28,15 @@ public class ProductController {
     private final ProductService productService;
     private final ProductLinkService productLinkService;
     private final RegionService regionService;
+    private final CommentService commentService;
 
     @Autowired
-    public ProductController(ProductService productService, ProductLinkService productLinkService, RegionService regionService) {
+    public ProductController(ProductService productService, ProductLinkService productLinkService, RegionService regionService,
+        CommentService commentService) {
         this.productService = productService;
         this.productLinkService = productLinkService;
         this.regionService = regionService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/list")
@@ -82,13 +88,14 @@ public class ProductController {
     @GetMapping("/detail/{id}")
     public ResponseEntity<Map<String, Object>> detail(@PathVariable Long id) {
         Product_mst product = productService.findById(id);
-        // List<REGION_CD>를 가져온다.
         List<String> regionCds = productLinkService.getProductCdByProductCd(String.valueOf(id));
-        // x, y좌표를 가져온다.
         List<Region_mst> regions = regionService.getRegionMstsByRegionCds(regionCds);
+        List<Comment_mst> comments = commentService.getCommentsByProductCd(String.valueOf(id));
+
         Map<String, Object> results = new HashMap<>();
         results.put("product", product);
         results.put("regions", regions);
+        results.put("comments", comments);
 
         if(product == null) {
             return ResponseEntity.notFound().build();
