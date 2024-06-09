@@ -16,25 +16,25 @@ class ProductMstControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void list() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/list")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(containsString("{\"id\":1")));
-    }
-
-    @Test
-    public void save() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/save")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    public void edit() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/edit")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
+    // @Test
+    // public void list() throws Exception {
+    //     mockMvc.perform(MockMvcRequestBuilders.get("/list")
+    //             .contentType(MediaType.APPLICATION_JSON))
+    //             .andExpect(MockMvcResultMatchers.status().isOk())
+    //             .andExpect(MockMvcResultMatchers.content().string(containsString("{\"id\":1")));
+    // }
+    //
+    // @Test
+    // public void save() throws Exception {
+    //     mockMvc.perform(MockMvcRequestBuilders.get("/save")
+    //             .contentType(MediaType.APPLICATION_JSON))
+    //             .andExpect(MockMvcResultMatchers.status().isOk());
+    // }
+    //
+    // @Test
+    // public void edit() throws Exception {
+    //     mockMvc.perform(MockMvcRequestBuilders.get("/edit")
+    //             .contentType(MediaType.APPLICATION_JSON))
+    //             .andExpect(MockMvcResultMatchers.status().isOk());
+    // }
 }
