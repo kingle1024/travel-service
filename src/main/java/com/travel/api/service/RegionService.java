@@ -1,19 +1,18 @@
 package com.travel.api.service;
 
-import static com.travel.api.vo.QRegion_mst.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.querydsl.core.Tuple;
 import com.travel.api.repository.RegionRepositoryImpl;
+import com.travel.api.vo.QRegion_mst;
 import com.travel.api.vo.Region_mst;
 
 @Service
 public class RegionService {
     private final RegionRepositoryImpl regionRepository;
+    private final QRegion_mst qRegion_mst = QRegion_mst.region_mst;
 
     @Autowired
     public RegionService(RegionRepositoryImpl regionRepository) {
@@ -26,8 +25,8 @@ public class RegionService {
         List<Region_mst> regionMsts = new ArrayList<>();
         for (Tuple tuple : items) {
             Region_mst regionMst = new Region_mst();
-            regionMst.setLEVEL4(tuple.get(region_mst.LEVEL4));
-            regionMst.setRegionCd(tuple.get(region_mst.regionCd));
+            regionMst.setLEVEL4(tuple.get(qRegion_mst.LEVEL4));
+            regionMst.setRegionCd(tuple.get(qRegion_mst.regionCd));
             regionMsts.add(regionMst);
         }
 
@@ -40,8 +39,8 @@ public class RegionService {
         List<Region_mst> regionMsts = new ArrayList<>();
         for (Tuple tuple : items) {
             Region_mst regionMst = new Region_mst();
-            regionMst.setLEVEL2(tuple.get(region_mst.LEVEL2));
-            regionMst.setRegionCd(tuple.get(region_mst.regionCd));
+            regionMst.setLEVEL2(tuple.get(qRegion_mst.LEVEL2));
+            regionMst.setRegionCd(tuple.get(qRegion_mst.regionCd));
             regionMsts.add(regionMst);
         }
 
