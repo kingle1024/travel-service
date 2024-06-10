@@ -30,4 +30,8 @@ public class CommentService {
 
         return items;
     }
+
+    public Comment_mst save(Comment_mst comment) {
+        return commentRepository.save(comment);
+    }
 }
