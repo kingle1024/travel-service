@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.travel.api.dto.ProductRegionDto;
 import com.travel.api.repository.ProductRepository;
 import com.travel.api.vo.Product_mst;
 
@@ -20,10 +21,11 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product_mst> getProducts(List<String> productCds) {
+    public List<ProductRegionDto> getProducts(List<String> productCds) {
 
         if(isEmpty(productCds)) {
-            return productRepository.findAll();
+            // return productRepository.findAll();
+            return productRepository.findByProductCdIn(productCds);
         } else {
             // region이 null이면 해당 regionCd에 매칭되는 데이터가 없는 것으로 처리
             if (productCds.isEmpty()) {
