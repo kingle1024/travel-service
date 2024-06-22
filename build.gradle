@@ -30,6 +30,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.6.4'
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.1'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
@@ -38,6 +41,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'javax.persistence:javax.persistence-api:2.2'
+    implementation 'org.json:json:20240303'
 }
 
 test {
