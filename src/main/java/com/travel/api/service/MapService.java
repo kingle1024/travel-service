@@ -9,10 +9,13 @@ import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class MapService {
-    private static final String API_KEY = "7de6ef4a7dc4548b939d0a1dd3e9cda8"; // 여기에 발급받은 카카오 API 키를 입력하세요
+
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String API_KEY;
 
     public double[] getLatLngFromAddress(String address) throws Exception {
         String urlString = "https://dapi.kakao.com/v2/local/search/address.json?query=" +
