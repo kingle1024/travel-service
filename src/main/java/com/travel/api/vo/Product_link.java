@@ -22,4 +22,5 @@ public class Product_link {
     private Long id;
     private String productCd;
     private String regionCd;
+    private int rank;
 }

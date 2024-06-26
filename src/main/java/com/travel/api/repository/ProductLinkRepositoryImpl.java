@@ -32,6 +32,7 @@ public class ProductLinkRepositoryImpl implements ProductLinkRepository {
             .select(qProductLink.product_link.regionCd)
             .from(qProductLink.product_link)
             .where(qProductLink.product_link.productCd.eq(productCd))
+            .orderBy(qProductLink.product_link.rank.asc())
             .fetch();
     }
 }
