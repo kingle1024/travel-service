@@ -37,9 +37,7 @@ public class SecurityConfig
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:8100"); // Local
-        config.addAllowedOrigin("http://localhost:8091"); // Server
-        config.addAllowedOrigin("http://datecourse.net"); // Server
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
