@@ -31,4 +31,5 @@ public class Region_mst {
     private String lat;
     private String lng;
     private String title;
+    private String rank;
 }

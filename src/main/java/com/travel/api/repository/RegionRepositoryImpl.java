@@ -46,6 +46,7 @@ public class RegionRepositoryImpl implements RegionRepository {
                 .select(qRegion_mst)
                 .from(qRegion_mst)
                 .where(qRegion_mst.regionCd.in(items))
+                .orderBy(qRegion_mst.rank.asc())
                 .fetch();
     }
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class KakaoController {
     @PostMapping("/kakaoLogin")
     public String kakaoLogin(@RequestBody Map<String, String> body) {
-       String accessToken = body.get("accessToken");
+       final String accessToken = body.get("accessToken");
 
        RestTemplate restTemplate = new RestTemplate();
 
