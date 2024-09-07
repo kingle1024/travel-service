@@ -27,7 +27,7 @@ public class RegionRepositoryImpl implements RegionRepository {
                 .select(qRegion_mst.LEVEL4, qRegion_mst.regionCd)
                 .from(qRegion_mst)
                 .where(items != null ? qRegion_mst.LEVEL2.in(items) : null)
-                .groupBy(qRegion_mst.LEVEL4)
+                .groupBy(qRegion_mst.LEVEL4, qRegion_mst.regionCd)
                 .fetch();
     }
 
@@ -36,7 +36,7 @@ public class RegionRepositoryImpl implements RegionRepository {
         return queryFactory
                 .select(qRegion_mst.LEVEL2, qRegion_mst.regionCd)
                 .from(qRegion_mst)
-                .groupBy(qRegion_mst.LEVEL2)
+                .groupBy(qRegion_mst.LEVEL2, qRegion_mst.regionCd)
                 .fetch();
     }
 
