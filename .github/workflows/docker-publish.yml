@@ -19,9 +19,9 @@ jobs:
           java-version: '11'  # JDK 버전 설정
           distribution: 'adopt'  # JDK 배포판
 
-      - name: Build with Maven
-        run: mvn clean package
-        working-directory: ./travel-service  # POM 파일이 위치한 디렉토리로 변경
+      - name: Build with Gradle
+        run: ./gradlew clean build
+        working-directory: ./travel-service  # build.gradle 파일이 위치한 디렉토리로 설정
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
