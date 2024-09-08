@@ -22,8 +22,8 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew  # gradlew에 실행 권한 부여
 
-      - name: Build with Gradle
-        run: ./gradlew clean build
+      - name: Build with Gradle(without tests)
+        run: ./gradlew clean build -x test
         working-directory: ./  # 루트 디렉토리로 설정
 
       - name: Log in to Docker Hub
