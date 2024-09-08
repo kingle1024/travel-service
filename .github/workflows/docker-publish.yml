@@ -19,6 +19,9 @@ jobs:
           java-version: '11'  # JDK 버전 설정
           distribution: 'adopt'  # JDK 배포판
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew  # gradlew에 실행 권한 부여
+
       - name: Build with Gradle
         run: ./gradlew clean build
         working-directory: ./  # 루트 디렉토리로 설정
