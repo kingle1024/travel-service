@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # JAR 파일 복사
-COPY target/*.jar app.jar
+COPY build/libs/*.jar app.jar
 
 # 포트 설정 (예: 8080 포트)
 EXPOSE 8080
