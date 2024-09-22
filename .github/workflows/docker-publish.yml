@@ -42,4 +42,4 @@ jobs:
 
       - name: Trigger Jenkins Build
         run: |
-          curl -X POST http://34.132.187.141:8080/job/travel-backend/build?token=${{ secrets.JENKINS_TOKEN }}
+          curl -X POST http://${{ secrets.JENKINS_URL }}/job/travel-backend/build?token=${{ secrets.JENKINS_TOKEN }}
