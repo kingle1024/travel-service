@@ -39,3 +39,7 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ejy1024/travel-service:latest
+
+      - name: Trigger Jenkins Build
+        run: |
+          curl -X POST http://34.132.187.141:8080/job/travel-backend/build?token=${{ secrets.JENKINS_TOKEN }}
