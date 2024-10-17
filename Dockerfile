@@ -6,9 +6,9 @@ WORKDIR /app
 
 # JAR 파일 복사
 COPY build/libs/*.jar app.jar
-
+COPY /home/ec2-user/keystore.p12 keystore.p12
 # 포트 설정 (예: 8080 포트)
-EXPOSE 8080
+EXPOSE 443
 
 # 애플리케이션 실행
 CMD ["java", "-jar", "app.jar"]
