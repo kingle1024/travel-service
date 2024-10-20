@@ -51,4 +51,3 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
           ssh -i private_key ec2-user@api.datecourse.net "docker pull ejy1024/travel-service:latest && docker run -d --rm ejy1024/travel-service:latest"
-      
