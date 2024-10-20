@@ -39,21 +39,10 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ejy1024/travel-service:latest
-
-      - name: Get Jenkins Crumb
-        id: get_crumb
+      - name: Deploy to Server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          CRUMB=$(curl -u "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_TOKEN }}" \
-           -v "http://${{ secrets.JENKINS_URL }}/crumbIssuer/api/json")
-          
-          CRUMB_FIELD=$(echo "$CRUMB" | grep -oP '"crumbRequestField":\s*"\K[^"]+')
-          CRUMB_VALUE=$(echo "$CRUMB" | grep -oP '"crumb":\s*"\K[^"]+')
-
-          FINAL_CRUMB="$CRUMB_FIELD:$CRUMB_VALUE"
-          echo "FINAL_CRUMB=$FINAL_CRUMB" >> $GITHUB_ENV
-
-      - name: Trigger Jenkins Build
-        run: |
-          curl -u "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_TOKEN }}" \
-          -X POST "http://${{ secrets.JENKINS_URL }}/job/travel-backend/build" \
-          -H "${{ env.FINAL_CRUMB }}" 
+          echo "$SSH_PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          ssh -i private_key ec2-user@api.datecourse.net "docker pull ejy1024/travel-service:latest && docker run -d --rm ejy1024/travel-service:latest"
