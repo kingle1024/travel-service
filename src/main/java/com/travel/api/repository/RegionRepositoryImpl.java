@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.travel.api.vo.QRegion_mst;
 import com.travel.api.vo.Region_mst;
@@ -22,21 +21,21 @@ public class RegionRepositoryImpl implements RegionRepository {
     }
 
     @Override
-    public List<Tuple> findAllGroupByLevel4(List<String> items) {
+    public List<String> findAllGroupByLevel4(List<String> items) {
         return queryFactory
-                .select(qRegion_mst.LEVEL4, qRegion_mst.regionCd)
+                .select(qRegion_mst.LEVEL4)
                 .from(qRegion_mst)
                 .where(items != null ? qRegion_mst.LEVEL2.in(items) : null)
-                .groupBy(qRegion_mst.LEVEL4, qRegion_mst.regionCd)
+                .groupBy(qRegion_mst.LEVEL4)
                 .fetch();
     }
 
     @Override
-    public List<Tuple> findAllGroupByLevel2() {
+    public List<String> findAllGroupByLevel2() {
         return queryFactory
-                .select(qRegion_mst.LEVEL2, qRegion_mst.regionCd)
+                .select(qRegion_mst.LEVEL2)
                 .from(qRegion_mst)
-                .groupBy(qRegion_mst.LEVEL2, qRegion_mst.regionCd)
+                .groupBy(qRegion_mst.LEVEL2)
                 .fetch();
     }
 

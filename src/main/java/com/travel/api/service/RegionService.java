@@ -20,13 +20,12 @@ public class RegionService {
     }
 
     public List<Region_mst> getRegions4(List<String> level4List) {
-        List<Tuple> items = regionRepository.findAllGroupByLevel4(level4List);
+        List<String> items = regionRepository.findAllGroupByLevel4(level4List);
 
         List<Region_mst> regionMsts = new ArrayList<>();
-        for (Tuple tuple : items) {
+        for (String item : items) {
             Region_mst regionMst = new Region_mst();
-            regionMst.setLEVEL4(tuple.get(qRegion_mst.LEVEL4));
-            regionMst.setRegionCd(tuple.get(qRegion_mst.regionCd));
+            regionMst.setLEVEL4(item);
             regionMsts.add(regionMst);
         }
 
@@ -34,13 +33,12 @@ public class RegionService {
     }
 
     public List<Region_mst> getRegions2() {
-        List<Tuple> items = regionRepository.findAllGroupByLevel2();
+        List<String> items = regionRepository.findAllGroupByLevel2();
 
         List<Region_mst> regionMsts = new ArrayList<>();
-        for (Tuple tuple : items) {
+        for(String item : items) {
             Region_mst regionMst = new Region_mst();
-            regionMst.setLEVEL2(tuple.get(qRegion_mst.LEVEL2));
-            regionMst.setRegionCd(tuple.get(qRegion_mst.regionCd));
+            regionMst.setLEVEL2(item);
             regionMsts.add(regionMst);
         }
 
