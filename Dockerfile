@@ -13,7 +13,7 @@
 # CMD ["java", "-jar", "app.jar"]
 
 # jar 파일 빌드
-FROM openjdk:11-jre-slim as builder
+FROM eclipse-temurin:11 as builder
 
 COPY gradlew .
 COPY gradle gradle
@@ -27,7 +27,7 @@ RUN ./gradlew bootjar
 
 # jar 실행
 # 빌드를 하지 않으므로 JDK가 아닌 JRE를 베이스 이미지로 세팅
-FROM openjdk:11-jre-slim as runtime
+FROM eclipse-temurin:11 as builder
 
 RUN addgroup --system --gid 1000 worker
 RUN adduser --system --uid 1000 --ingroup worker --disabled-password worker
