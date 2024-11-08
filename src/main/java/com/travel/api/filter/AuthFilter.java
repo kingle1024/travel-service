@@ -6,35 +6,48 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.travel.api.service.UserService;
+import com.travel.api.security.AllowedPaths;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
+@Component
 public class AuthFilter extends OncePerRequestFilter {
     private static final String SECRET_KEY = "your_secret_key";
-    private final UserService userService;
-
-    @Autowired
-    public AuthFilter(UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-        FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        FilterChain filterChain
+    ) throws ServletException, IOException {
+        String requestUri = request.getRequestURI();
 
-        String token = getTokenFromRequest(request);
+        // 허용된 경로인지 확인
+        for (String path : AllowedPaths.getAllowedPaths()) {
+            if (requestUri.matches(path.replace("**", ".*"))) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
 
+        final String token = getTokenFromRequest(request);
+        if (token != null && validateToken(token)) {
+            String userId = getUserIdFromToken(token);
+            request.setAttribute("userId", userId);
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or missing token");
+            return;
+        }
+        filterChain.doFilter(request, response);
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
-        String bearerToken =request.getHeader("Authorization");
+        final String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
