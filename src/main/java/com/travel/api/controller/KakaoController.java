@@ -51,7 +51,7 @@ public class KakaoController {
                                      .getJSONObject("profile")
                                      .getString("nickname");
 
-        UserDetails userDetails = userService.loadUserById("kakao@" + id, nickname);
+        UserDetails userDetails = userService.loadUserById(userId, nickname);
 
         String jwtToken = UtilityTravel.generateToken(userId);
         Map<String, Object> responseBody = new HashMap<>();

@@ -32,7 +32,7 @@ public class UtilityTravel {
             .setSubject(userId)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512.HS256, SECRET_KEY)
+            .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
             .compact();
     }
 }
