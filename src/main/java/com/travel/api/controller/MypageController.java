@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.travel.api.service.LikeService;
 import com.travel.api.service.ProductService;
-import com.travel.api.vo.Like_mst;
+import com.travel.api.entity.LikeEntity;
 
 @RestController
 @RequestMapping("/api/mypage")
@@ -39,9 +39,9 @@ public class MypageController {
                 .body(Map.of("error", "로그인 정보가 없습니다."));
         }
 
-        List<Like_mst> items = likeService.getProductCds(userId);
+        List<LikeEntity> items = likeService.getProductCds(userId);
         List<String> productCds = new ArrayList<>();
-        for (Like_mst like : items) {
+        for (LikeEntity like : items) {
             productCds.add(like.getProductCd());
         }
 

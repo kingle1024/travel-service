@@ -35,9 +35,9 @@ public class AuthFilter extends OncePerRequestFilter {
             }
         }
 
-        final String token = getTokenFromRequest(request);
+        final String token = getTokenByRequest(request);
         if (token != null && validateToken(token)) {
-            String userId = getUserIdFromToken(token);
+            String userId = getUserIdByToken(token);
             request.setAttribute("userId", userId);
         } else {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or missing token");
@@ -46,13 +46,35 @@ public class AuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String getTokenFromRequest(HttpServletRequest request) {
+    public String getUserIdByRequest(HttpServletRequest request) {
+        final String token = getTokenByRequest(request);
+        return getUserIdByToken(token);
+    }
+
+    private String getTokenByRequest(HttpServletRequest request) {
         final String bearerToken = request.getHeader("Authorization");
+        if(bearerToken == null) {
+            return null;
+        }
+
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
 
         return null;
+    }
+
+    public String getUserIdByToken(String token) {
+        if(token == null) {
+            return null;
+        }
+
+        try {
+            Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+            return claims.getSubject();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private boolean validateToken(String token) {
@@ -62,11 +84,6 @@ public class AuthFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    private String getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-        return claims.getSubject();
     }
 }
 

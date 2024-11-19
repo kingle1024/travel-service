@@ -50,6 +50,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'javax.persistence:javax.persistence-api:2.2'
     implementation 'org.json:json:20240303'
+    implementation 'com.github.vladimir-bukhtoyarov:bucket4j-core:7.5.0'
 }
 
 test {
