@@ -121,4 +121,15 @@ public class LikeService {
                 .build());
     }
 
+    public List<LikeEntity> getPendingLikes() {
+        return new ArrayList<>(pendingLikes);
+    }
+
+    public List<LikeEntity> getPendingUnLikes() {
+        return new ArrayList<>(pendingUnLikes);
+    }
+
+    public void setBucket(String key, Bucket bucket) {
+        buckets.put(key, bucket);
+    }
 }
