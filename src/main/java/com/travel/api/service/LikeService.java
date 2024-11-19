@@ -1,7 +1,10 @@
 package com.travel.api.service;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -15,10 +18,15 @@ import com.travel.api.repository.LikeRepository;
 import com.travel.api.entity.LikeEntity;
 import com.travel.api.vo.LikeCompositeKey;
 
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Refill;
+
 @Service
 public class LikeService {
 
     private static final Logger log = LoggerFactory.getLogger(LikeService.class);
+    private final Map<String, Bucket> buckets = new HashMap<>();
     private final LikeRepository likeRepository;
 
     // 대기 중인 좋아요 리스트
@@ -88,4 +96,29 @@ public class LikeService {
     public void scheduleProcessLikes() {
         processLikesInBatch(); // 좋아요 추가
     }
+
+    public boolean processLike(String productCd, String userId, boolean isLike) {
+        Bucket userBucket = resolveBucket(productCd, userId);
+        boolean consumed = userBucket.tryConsume(1);
+
+        if(consumed) {
+            if(isLike) {
+                queueLike(productCd, userId);
+            } else {
+                queueUnlike(productCd, userId);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 사용자별 Bucket 생성 또는 반환
+    protected Bucket resolveBucket(String productCd, String userId) {
+        final String key = productCd + ":" + userId; // 조합 키 생성
+        return buckets.computeIfAbsent(key, k -> Bucket.builder()
+                .addLimit(Bandwidth.classic(3, Refill.greedy(3, Duration.ofSeconds(5)))) // 10초에 3번 호출 허용
+                .build());
+    }
+
 }

@@ -43,7 +43,6 @@ public class ProductController {
     private final CommentService commentService;
     private final LikeService likeService;
     private final AuthFilter authFilter;
-    private final Map<String, Bucket> buckets = new HashMap<>();
 
     @Autowired
     public ProductController(ProductService productService, ProductLinkService productLinkService, RegionService regionService,
@@ -56,13 +55,7 @@ public class ProductController {
         this.authFilter = authFilter;
     }
 
-    // 사용자별 Bucket 생성 또는 반환
-    private Bucket resolveBucket(String productCd, String userId) {
-        final String key = productCd + ":" + userId; // 조합 키 생성
-        return buckets.computeIfAbsent(key, k -> Bucket.builder()
-                .addLimit(Bandwidth.classic(3, Refill.greedy(3, Duration.ofSeconds(5)))) // 10초에 3번 호출 허용
-                .build());
-    }
+
 
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> list (
@@ -145,8 +138,7 @@ public class ProductController {
 
     private ResponseEntity<Void> handleLike(String productCd, boolean isLike, HttpServletRequest request) {
         final String userId = authFilter.getUserIdByRequest(request);
-        Bucket userBucket = resolveBucket(productCd, userId);
-        boolean consumed = userBucket.tryConsume(1);
+        final boolean consumed = likeService.processLike(productCd, userId, isLike);
 
         if (consumed) {
             if(isLike) {
