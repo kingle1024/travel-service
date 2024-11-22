@@ -14,5 +14,5 @@ import com.travel.api.vo.LikeCompositeKey;
 public interface LikeRepository extends JpaRepository<LikeEntity, LikeCompositeKey>, QuerydslPredicateExecutor<LikeEntity> {
     List<LikeEntity> findById_UserId(String userId);
 
-    Optional<LikeEntity> findById_UserIdAndId_ProductCd(String userId, String productId);
+    Optional<LikeEntity> findById_UserIdAndId_ProductCd(String userId, String productCd);
 }

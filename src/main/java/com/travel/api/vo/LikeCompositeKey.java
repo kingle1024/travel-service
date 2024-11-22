@@ -6,12 +6,14 @@ import java.util.Objects;
 import javax.persistence.Embeddable;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Embeddable
 @Getter
+@NoArgsConstructor
 public class LikeCompositeKey implements Serializable {
-    private final String userId;
-    private final String productCd;
+    private String userId;
+    private String productCd;
 
     public LikeCompositeKey(String userId, String productCd) {
         this.userId = userId;
