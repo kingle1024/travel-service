@@ -26,4 +26,5 @@ public class Product_mst {
     private String title;
     private String url;
     private String productCd;
+    private Long views;
 }

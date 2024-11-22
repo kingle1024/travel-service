@@ -44,4 +44,14 @@ public class ProductService {
         Optional<Product_mst> byId = productRepository.findById(id);
         return byId.orElse(null);
     }
+
+    public void incrementViewCount(Long productId) {
+        Product_mst product = findById(productId);
+        if (product != null) {
+            // 조회수 증가
+            product.setViews(product.getViews() + 1);
+            // 변경된 제품 저장
+            save(product);
+        }
+    }
 }
