@@ -30,6 +30,13 @@ class ProductServiceTest {
     }
 
     @Test
+    void testGetProducts_EmptyProductCds() {
+        List<ProductRegionDto> result = productService.getProducts(Collections.emptyList());
+        assertEquals(Collections.emptyList(), result);
+        verify(productRepository, never()).findByProductCdIn(any());
+    }
+
+    @Test
     void testGetProducts_WithProductCds() {
         List<String> productCds = List.of("1", "2");
 

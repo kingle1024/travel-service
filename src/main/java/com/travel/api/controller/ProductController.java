@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,10 +30,6 @@ import com.travel.api.service.RegionService;
 import com.travel.api.vo.Comment_mst;
 import com.travel.api.vo.Product_mst;
 import com.travel.api.vo.Region_mst;
-
-import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -104,7 +102,7 @@ public class ProductController {
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<Map<String, Object>> detail(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> detail(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) {
         Product_mst product = productService.findById(id);
         final String productCd = String.valueOf(id);
         List<String> regionCds = productLinkService.getProductCdByProductCd(productCd);
@@ -118,11 +116,36 @@ public class ProductController {
         results.put("product", product);
         results.put("regions", regions);
         results.put("comments", comments);
+        addViewCount(id, productCd, request, response);
 
         if(product == null) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(results);
+        }
+    }
+
+    private void addViewCount(Long id, String productCd, HttpServletRequest request, HttpServletResponse response) {
+        // 쿠키를 통해 조회수 증가 로직
+        Cookie[] cookies = request.getCookies();
+        String viewCountCookieName = "viewCount_" + productCd; // 제품별 조회수 쿠키 이름
+        boolean hasVisited = false;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(viewCountCookieName)) {
+                    hasVisited = true;
+                    break;
+                }
+            }
+        }
+
+        // 쿠키가 존재하지 않는 경우 조회수 증가
+        if (!hasVisited) {
+            productService.incrementViewCount(id); // 서비스 메서드 호출
+            Cookie viewCountCookie = new Cookie(viewCountCookieName, "1");
+            viewCountCookie.setMaxAge(60 * 60 * 24); // 쿠키 유효 기간 설정 (1일)
+            response.addCookie(viewCountCookie); // 응답에 쿠키 추가
         }
     }
 
