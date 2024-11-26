@@ -38,16 +38,21 @@ class CommentServiceTest {
         comment2.setAuthor("Jane Smith");
         comment2.setProductCd("P001");
 
+        Comment_mst comment3 = new Comment_mst();
+        comment3.setAuthor("J");
+        comment3.setProductCd("P001");
+
         when(commentRepository.findByProductCdOrderByInsertDtsDesc("P001"))
-            .thenReturn(Arrays.asList(comment1, comment2));
+            .thenReturn(Arrays.asList(comment1, comment2, comment3));
 
         // When
         List<Comment_mst> comments = commentService.getCommentsByProductCd("P001");
 
         // Then
-        assertEquals(2, comments.size());
+        assertEquals(3, comments.size());
         assertEquals("J*******", comments.get(0).getAuthor()); // assuming maskAuthor masks to "**** Doe"
         assertEquals("J*********", comments.get(1).getAuthor()); // assuming maskAuthor masks to "**** Smith"
+        assertEquals("J", comments.get(2).getAuthor()); // 1자리일때에는 마스킹 안함
     }
 
     @Test
