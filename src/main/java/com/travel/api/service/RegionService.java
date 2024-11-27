@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.querydsl.core.Tuple;
 import com.travel.api.repository.RegionRepositoryImpl;
-import com.travel.api.vo.QRegion_mst;
 import com.travel.api.vo.Region_mst;
 
 @Service
 public class RegionService {
     private final RegionRepositoryImpl regionRepository;
-    private final QRegion_mst qRegion_mst = QRegion_mst.region_mst;
 
     @Autowired
     public RegionService(RegionRepositoryImpl regionRepository) {
