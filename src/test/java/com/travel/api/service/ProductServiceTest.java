@@ -54,7 +54,7 @@ class ProductServiceTest {
     @Test
     void testSave() {
         Product_mst productMst = new Product_mst();
-        productService.save(productMst);
+        productService.save(productMst, "userId");
         verify(productRepository, times(1)).save(productMst);
     }
 

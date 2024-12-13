@@ -40,6 +40,12 @@ public class ProductService {
         productRepository.save(productMst);
     }
 
+    public void save(Product_mst productMst, String userId) {
+        productMst.setViews(0L);
+        productMst.setAuthor(userId);
+        productRepository.save(productMst);
+    }
+
     public Product_mst findById(long id) {
         Optional<Product_mst> byId = productRepository.findById(id);
         return byId.orElse(null);
