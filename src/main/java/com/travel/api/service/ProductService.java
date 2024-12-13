@@ -5,6 +5,8 @@ import static org.springframework.util.ObjectUtils.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.travel.api.dto.ProductRegionDto;
@@ -43,6 +45,7 @@ public class ProductService {
     public void save(Product_mst productMst, String userId) {
         productMst.setViews(0L);
         productMst.setAuthor(userId);
+        productMst.setProductCd(UUID.randomUUID().toString().substring(0, 6));
         productRepository.save(productMst);
     }
 

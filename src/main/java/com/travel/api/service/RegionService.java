@@ -2,6 +2,8 @@ package com.travel.api.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +57,9 @@ public class RegionService {
     }
 
     public void save(List<Region_mst> regionMst) {
+        for (Region_mst region : regionMst) {
+            region.setRegionCd(UUID.randomUUID().toString().substring(0, 6));
+        }
         regionRepository.saveAll(regionMst);
     }
 }
