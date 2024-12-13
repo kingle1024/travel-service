@@ -34,8 +34,8 @@ class RegionServiceTest {
        List<Region_mst> result = regionService.getRegions4(level4List);
 
        assertEquals(2, result.size());
-       assertEquals("level4-1", result.get(0).getLEVEL4());
-       assertEquals("level4-2", result.get(1).getLEVEL4());
+       assertEquals("level4-1", result.get(0).getLevel4());
+       assertEquals("level4-2", result.get(1).getLevel4());
        verify(regionRepository, times(1)).findAllGroupByLevel4(level4List);
    }
 
@@ -46,8 +46,8 @@ class RegionServiceTest {
        List<Region_mst> result = regionService.getRegions2();
 
        assertEquals(2, result.size());
-       assertEquals("level2-1", result.get(0).getLEVEL2());
-       assertEquals("level2-2", result.get(1).getLEVEL2());
+       assertEquals("level2-1", result.get(0).getLevel2());
+       assertEquals("level2-2", result.get(1).getLevel2());
        verify(regionRepository, times(1)).findAllGroupByLevel2();
    }
 
@@ -69,16 +69,16 @@ class RegionServiceTest {
    public void testGetRegionMstsByRegionCds() {
        List<String> regionCds = Arrays.asList("cd1", "cd2");
        Region_mst region1 = new Region_mst();
-       region1.setLEVEL2("level2-1");
+       region1.setLevel2("level2-1");
        Region_mst region2 = new Region_mst();
-       region2.setLEVEL2("level2-2");
+       region2.setLevel2("level2-2");
        when(regionRepository.findByRegionCdIn(regionCds)).thenReturn(Arrays.asList(region1, region2));
 
        List<Region_mst> result = regionService.getRegionMstsByRegionCds(regionCds);
 
        assertEquals(2, result.size());
-       assertEquals("level2-1", result.get(0).getLEVEL2());
-       assertEquals("level2-2", result.get(1).getLEVEL2());
+       assertEquals("level2-1", result.get(0).getLevel2());
+       assertEquals("level2-2", result.get(1).getLevel2());
        verify(regionRepository, times(1)).findByRegionCdIn(regionCds);
    }
 }

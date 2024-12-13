@@ -11,7 +11,7 @@ import com.travel.api.vo.QRegion_mst;
 import com.travel.api.vo.Region_mst;
 
 @Repository
-public class RegionRepositoryImpl implements RegionRepository {
+public class RegionRepositoryImpl implements RegionRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final QRegion_mst qRegion_mst = QRegion_mst.region_mst;
 
@@ -23,19 +23,19 @@ public class RegionRepositoryImpl implements RegionRepository {
     @Override
     public List<String> findAllGroupByLevel4(List<String> items) {
         return queryFactory
-                .select(qRegion_mst.LEVEL4)
+                .select(qRegion_mst.level4)
                 .from(qRegion_mst)
-                .where(items != null ? qRegion_mst.LEVEL2.in(items) : null)
-                .groupBy(qRegion_mst.LEVEL4)
+                .where(items != null ? qRegion_mst.level2.in(items) : null)
+                .groupBy(qRegion_mst.level4)
                 .fetch();
     }
 
     @Override
     public List<String> findAllGroupByLevel2() {
         return queryFactory
-                .select(qRegion_mst.LEVEL2)
+                .select(qRegion_mst.level2)
                 .from(qRegion_mst)
-                .groupBy(qRegion_mst.LEVEL2)
+                .groupBy(qRegion_mst.level2)
                 .fetch();
     }
 
@@ -53,9 +53,9 @@ public class RegionRepositoryImpl implements RegionRepository {
     public List<String> findRegionCdsByLevel(List<String> level2List, List<String> level4List) {
         BooleanBuilder whereClause = new BooleanBuilder();
         if (level4List != null && !level4List.isEmpty()) {
-            whereClause.or(qRegion_mst.LEVEL4.in(level4List));
+            whereClause.or(qRegion_mst.level4.in(level4List));
         } else if(level2List != null && !level2List.isEmpty()) {
-            whereClause.or(qRegion_mst.LEVEL2.in(level2List));
+            whereClause.or(qRegion_mst.level2.in(level2List));
         }
 
         return queryFactory
