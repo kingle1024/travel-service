@@ -1,6 +1,5 @@
 package com.travel.api.controller;
 
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,13 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.travel.api.dto.ProductRegionSaveRequestDto;
 import com.travel.api.filter.AuthFilter;
 import com.travel.api.service.CommentService;
 import com.travel.api.service.LikeService;
@@ -84,13 +86,15 @@ public class ProductController {
         return ResponseEntity.ok(items);
     }
 
-    @GetMapping("/save")
-    public void save() {
-        Product_mst productMst = Product_mst.builder()
-            .title("random_" + UUID.randomUUID().toString().substring(0, 5))
-            .build();
-
-        productService.save(productMst);
+    @PostMapping("/product/save")
+    @Transactional
+    public void save(
+        @RequestBody ProductRegionSaveRequestDto productRegionSaveRequestDto,
+        HttpServletRequest request
+    ) {
+        final String userId = authFilter.getUserIdByRequest(request);
+        productService.save(productRegionSaveRequestDto.getProductMst(), userId);
+        regionService.save(productRegionSaveRequestDto.getRegionMst());
     }
 
     @GetMapping("/edit")
@@ -98,7 +102,7 @@ public class ProductController {
         Product_mst productMst = productService.findById(1L);
         productMst.setTitle("edit"+ UUID.randomUUID().toString().substring(0, 5));
 
-        productService.save(productMst);
+        // productService.save(productMst, userId);
     }
 
     @GetMapping("/detail/{id}")
