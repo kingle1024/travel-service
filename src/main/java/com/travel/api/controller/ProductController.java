@@ -93,8 +93,9 @@ public class ProductController {
         HttpServletRequest request
     ) {
         final String userId = authFilter.getUserIdByRequest(request);
-        productService.save(productRegionSaveRequestDto.getProductMst(), userId);
-        regionService.save(productRegionSaveRequestDto.getRegionMst());
+        Product_mst productItem = productService.save(productRegionSaveRequestDto.getProductMst(), userId);
+        List<Region_mst> regionItems = regionService.save(productRegionSaveRequestDto.getRegionMst());
+        productLinkService.save(productItem, regionItems);
     }
 
     @GetMapping("/edit")

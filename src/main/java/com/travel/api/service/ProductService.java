@@ -42,11 +42,12 @@ public class ProductService {
         productRepository.save(productMst);
     }
 
-    public void save(Product_mst productMst, String userId) {
+    public Product_mst save(Product_mst productMst, String userId) {
         productMst.setViews(0L);
         productMst.setAuthor(userId);
         productMst.setProductCd(UUID.randomUUID().toString().substring(0, 6));
         productRepository.save(productMst);
+        return productMst;
     }
 
     public Product_mst findById(long id) {

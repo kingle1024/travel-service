@@ -1,6 +1,8 @@
 package com.travel.api.vo;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,8 +21,9 @@ import lombok.Setter;
 @Builder
 public class Product_link {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String productCd;
     private String regionCd;
-    private int rank;
+    private Long rank;
 }

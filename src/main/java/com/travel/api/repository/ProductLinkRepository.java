@@ -1,11 +1,13 @@
 package com.travel.api.repository;
 
 import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ProductLinkRepository {
-    List<String> findByRegionCds(List<String> productCds);
+import com.travel.api.vo.Product_link;
 
-    List<String> findByProductCd(String productCd);
+@Repository
+public interface ProductLinkRepository extends JpaRepository<Product_link, Long>, ProductLinkRepositoryCustom {
+
 }

@@ -8,7 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.travel.api.vo.QProduct_link;
 
 @Repository
-public class ProductLinkRepositoryImpl implements ProductLinkRepository {
+public class ProductLinkRepositoryImpl implements ProductLinkRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final QProduct_link qProductLink = QProduct_link.product_link;
 
