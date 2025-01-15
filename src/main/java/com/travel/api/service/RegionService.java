@@ -56,10 +56,11 @@ public class RegionService {
         return regionRepositoryImpl.findByRegionCdIn(regionCds);
     }
 
-    public void save(List<Region_mst> regionMst) {
+    public List<Region_mst> save(List<Region_mst> regionMst) {
         for (Region_mst region : regionMst) {
             region.setRegionCd(UUID.randomUUID().toString().substring(0, 6));
         }
         regionRepository.saveAll(regionMst);
+        return regionMst;
     }
 }
