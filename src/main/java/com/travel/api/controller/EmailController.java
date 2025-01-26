@@ -25,7 +25,10 @@ public class EmailController {
     @PostMapping("/email/send")
     public ResponseEntity<Map<String, Object>> emailSend(@RequestBody EmailRequest emailRequest) {
         try {
-            emailService.sendEmail(emailRequest.getTo(), emailRequest.getSubject(), emailRequest.getBody());
+            final String title = "[Travel] 문의 메일 도착";
+            final String content = "문의자 : " + emailRequest.getTo() + "\n" + emailRequest.getBody();
+            emailService.sendEmail("kingle1024@gmail.com", title, content);
+
             Map<String, Object> results = new HashMap<>();
             results.put("result", "ok");
             return ResponseEntity.ok().body(results);
