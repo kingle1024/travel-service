@@ -10,7 +10,9 @@ public enum AllowedPaths {
     KAKAO_LOGIN("/api/kakaoLogin"),
     OAUTH2("/oauth2/**"),
     DETAIL("/detail/**"),
-    LIST("/list");
+    LIST("/list"),
+    EMAIL("/email/send")
+    ;
 
     private final String path;
 
