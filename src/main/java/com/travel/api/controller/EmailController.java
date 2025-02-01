@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.travel.api.dto.EmailRequest;
 import com.travel.api.service.EmailService;
 
-@RestController
+@RestController("/email")
 public class EmailController {
 
     private final EmailService emailService;
@@ -22,21 +23,21 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @PostMapping("/email/send")
+    @PostMapping("/send")
     public ResponseEntity<Map<String, Object>> emailSend(@RequestBody EmailRequest emailRequest) {
+        Map<String, Object> response = new HashMap<>();
+
         try {
             final String title = "[Travel] 문의 메일 도착";
-            final String content = "문의자 : " + emailRequest.getTo() + "\n" + emailRequest.getBody();
+            final String content = String.format("문의자 : %s\n%s", emailRequest.getTo(), emailRequest.getBody());
             emailService.sendEmail("kingle1024@gmail.com", title, content);
 
-            Map<String, Object> results = new HashMap<>();
-            results.put("result", "ok");
-            return ResponseEntity.ok().body(results);
+            response.put("result", "ok");
+            return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            Map<String, Object> errorResult = new HashMap<>();
-            errorResult.put("result", "error");
-            errorResult.put("message", e.getMessage());
-            return ResponseEntity.status(500).body(errorResult);
+            response.put("result", "error");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }
