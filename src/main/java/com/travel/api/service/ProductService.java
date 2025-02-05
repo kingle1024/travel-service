@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.travel.api.dto.ProductRegionDto;
@@ -55,13 +59,45 @@ public class ProductService {
         return byId.orElse(null);
     }
 
-    public void incrementViewCount(Long productId) {
-        Product_mst product = findById(productId);
-        if (product != null) {
-            // 조회수 증가
-            product.setViews(product.getViews() + 1);
-            // 변경된 제품 저장
-            save(product);
+    public void addViewCount(Long id, String productCd, HttpServletRequest request, HttpServletResponse response) {
+        // 쿠키를 통해 조회수 증가 로직
+        Cookie[] cookies = request.getCookies();
+        String viewCountCookieName = "viewCount_" + productCd; // 제품별 조회수 쿠키 이름
+
+        // 쿠키가 존재하지 않는 경우 조회수 증가
+        if (!hasVisited(cookies, viewCountCookieName)) {
+            Product_mst product = findById(id);
+
+            if (product != null) {
+                incrementViewCount(product);
+                setViewCountCookie(viewCountCookieName, response);
+            }
         }
+    }
+
+    private void incrementViewCount(Product_mst product) {
+        // 조회수 증가
+        product.setViews(product.getViews() + 1);
+        // 변경된 제품 저장
+        save(product);
+    }
+
+    private void setViewCountCookie(String cookieName, HttpServletResponse response) {
+        Cookie viewCountCookie = new Cookie(cookieName, "1");
+        viewCountCookie.setMaxAge(60 * 60 * 24); // 쿠키 유효 기간 설정 (1일)
+        response.addCookie(viewCountCookie);
+
+    }
+
+    private boolean hasVisited(Cookie[] cookies, String viewCountCookieName) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(viewCountCookieName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
