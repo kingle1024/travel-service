@@ -52,6 +52,8 @@ dependencies {
     implementation 'org.json:json:20240303'
     implementation 'com.github.vladimir-bukhtoyarov:bucket4j-core:7.5.0'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'io.lettuce.core:lettuce-core'
 }
 
 test {
