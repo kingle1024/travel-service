@@ -6,6 +6,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,7 +19,8 @@ import io.jsonwebtoken.Jwts;
 
 @Component
 public class AuthFilter extends OncePerRequestFilter {
-    private static final String SECRET_KEY = "your_secret_key";
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
 
     @Override
     protected void doFilterInternal(
