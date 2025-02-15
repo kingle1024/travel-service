@@ -17,6 +17,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.travel.api.common.UtilityTravel;
+import com.travel.api.service.TokenService;
 import com.travel.api.service.UserService;
 
 
@@ -25,10 +26,14 @@ import com.travel.api.service.UserService;
 public class KakaoController {
 
     private final UserService userService;
+    private final TokenService tokenService;
+    private final UtilityTravel utilityTravel;
 
     @Autowired
-    public KakaoController(UserService userService) {
+    public KakaoController(UserService userService, TokenService tokenService, UtilityTravel utilityTravel) {
         this.userService = userService;
+        this.tokenService = tokenService;
+        this.utilityTravel = utilityTravel;
     }
 
     @PostMapping("/kakaoLogin")
@@ -51,11 +56,14 @@ public class KakaoController {
                                      .getJSONObject("profile")
                                      .getString("nickname");
 
-        UserDetails userDetails = userService.loadUserById(userId, nickname);
+        String jwtToken = utilityTravel.generateToken(userId, false);
+        String refreshToken = utilityTravel.generateToken(userId, true);
+        UserDetails userDetails = userService.loadUserById(userId, nickname, refreshToken);
+        tokenService.saveRefreshToken(userId, refreshToken);
 
-        String jwtToken = UtilityTravel.generateToken(userId);
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("token", jwtToken);
+        responseBody.put("refreshToken", refreshToken);
         responseBody.put("userId", userId);
         responseBody.put("nickname", nickname);
         responseBody.put("userDetails", userDetails);

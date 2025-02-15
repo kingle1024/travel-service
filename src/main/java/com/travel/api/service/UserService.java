@@ -21,13 +21,14 @@ public class UserService implements UserDetailService{
     }
 
     @Override
-    public UserDetails loadUserById(String userId, String username) throws UsernameNotFoundException {
+    public UserDetails loadUserById(String userId, String username, String refreshToken) throws UsernameNotFoundException {
         User user = userRepository.findByUserId(userId);
         UserDetails userDetails;
         if(user == null) {
             userRepository.save(User.builder()
                 .userId(userId)
                 .username(username)
+                .refreshToken(refreshToken)
                 .build());
             userDetails = new org.springframework.security.core.userdetails.User(
                 username, "user.getPassword()", new ArrayList<>()
