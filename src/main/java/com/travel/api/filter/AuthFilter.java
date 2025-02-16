@@ -16,7 +16,9 @@ import com.travel.api.security.AllowedPaths;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class AuthFilter extends OncePerRequestFilter {
     @Value("${jwt.secret}")
@@ -85,6 +87,7 @@ public class AuthFilter extends OncePerRequestFilter {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
+            log.info("error {}", e.getMessage());
             return false;
         }
     }
