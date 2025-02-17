@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.travel.api.common.UtilityTravel;
 import com.travel.api.dto.TokenResponse;
+import com.travel.api.exception.InvalidTokenException;
 
 @Service
 public class AuthService {
@@ -33,7 +34,7 @@ public class AuthService {
     private void validateRefreshToken(String userId, String refreshToken) {
         String storedRefreshToken = tokenService.getRefreshToken(userId);
         if (!refreshToken.equals(storedRefreshToken)) {
-            throw new RuntimeException("Invalid Refresh Token");
+            throw new InvalidTokenException("Invalid Refresh Token");
         }
     }
     private TokenResponse createTokenResponse(String accessToken, String refreshToken) {
