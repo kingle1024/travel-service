@@ -18,13 +18,7 @@ public class AuthService {
     }
 
     public TokenResponse refreshAccessToken(String userId, String refreshToken) {
-        // Redis에서 Refresh Token으로 사용자 이름을 가져옴
-        String getRedisToken = tokenService.getRefreshToken(userId);
-        if (!refreshToken.equals(getRedisToken)) {
-            throw new RuntimeException("Invalid Refresh Token");
-        }
-
-        // JWT 서명 검증 및 만료 시간 확인
+        validateRefreshToken(userId, refreshToken);
         utilityTravel.validToken(refreshToken);
 
         // 새로운 Access Token 및 Refresh Token 생성
@@ -34,10 +28,18 @@ public class AuthService {
         // Redis에 새로운 Refresh Token 저장
         tokenService.saveRefreshToken(userId, refreshToken);
 
-        // TokenResponse 객체 생성 및 반환
+        return createTokenResponse(newAccessToken, newRefreshToken);
+    }
+    private void validateRefreshToken(String userId, String refreshToken) {
+        String storedRefreshToken = tokenService.getRefreshToken(userId);
+        if (!refreshToken.equals(storedRefreshToken)) {
+            throw new RuntimeException("Invalid Refresh Token");
+        }
+    }
+    private TokenResponse createTokenResponse(String accessToken, String refreshToken) {
         TokenResponse response = new TokenResponse();
-        response.setAccessToken(newAccessToken);
-        response.setRefreshToken(newRefreshToken);
+        response.setAccessToken(accessToken);
+        response.setRefreshToken(refreshToken);
         return response;
     }
 }
