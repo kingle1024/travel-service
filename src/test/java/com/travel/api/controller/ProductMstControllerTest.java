@@ -76,7 +76,7 @@ class ProductMstControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.product").exists());
 
-        verify(productService).incrementViewCount(productId); // 조회수 증가 확인
+        verify(productService, times(1)).addViewCount(eq(productId), eq(productCd), any(), any());
     }
 
     @Test
