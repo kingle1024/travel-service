@@ -55,8 +55,6 @@ public class ProductController {
         this.authFilter = authFilter;
     }
 
-
-
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> list (
         @RequestParam(required = false) String level2,
@@ -139,6 +137,12 @@ public class ProductController {
     @DeleteMapping("/likes/{productCd}")
     public ResponseEntity<Void> likeDelete(@PathVariable String productCd, HttpServletRequest request) {
         return handleLike(productCd, false, request);
+    }
+
+    @GetMapping("/top-products")
+    public ResponseEntity<List<Product_mst>> getTopProducts() {
+        List<Product_mst> topProducts = productService.getTopRankedProducts(5); // 상위 5개 제품 반환
+        return ResponseEntity.ok(topProducts);
     }
 
     private ResponseEntity<Void> handleLike(String productCd, boolean isLike, HttpServletRequest request) {

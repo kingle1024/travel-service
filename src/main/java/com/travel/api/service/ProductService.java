@@ -1,16 +1,20 @@
 package com.travel.api.service;
 
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.travel.api.dto.ProductRegionDto;
 import com.travel.api.repository.ProductRepository;
@@ -20,10 +24,17 @@ import com.travel.api.vo.Product_mst;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+    @Value("${ranking.key}")
+    private String RANKING_KEY;
+
+    @Value("${event.key_prefix}")
+    private String EVENT_KEY_PREFIX;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, RedisTemplate<String, Object> redisTemplate) {
         this.productRepository = productRepository;
+        this.redisTemplate = redisTemplate;
     }
 
     public List<ProductRegionDto> getProducts(List<String> productCds) {
@@ -64,6 +75,15 @@ public class ProductService {
             if (product != null) {
                 incrementViewCount(product);
                 setViewCountCookie(viewCountCookieName, response);
+                redisTemplate.opsForZSet().incrementScore(RANKING_KEY, id, 1);
+
+                // 이벤트 기록 (현재 시간 추가)
+                String eventKey = EVENT_KEY_PREFIX + id;
+                long currentTime = System.currentTimeMillis() / 1000; // 현재 시간 (초 단위)
+                redisTemplate.opsForList().rightPush(eventKey, currentTime);
+
+                // TTL 설정: 이벤트 기록의 TTL (예: 1시간)
+                redisTemplate.expire(eventKey, 1, TimeUnit.HOURS);
             }
         }
     }
@@ -92,5 +112,19 @@ public class ProductService {
         }
 
         return false;
+    }
+
+    // 랭킹 조회 메서드 추가
+    public List<Product_mst> getTopRankedProducts(int topN) {
+        Set<Object> topProductIds = redisTemplate.opsForZSet().reverseRange(RANKING_KEY, 0, topN - 1);
+        if (topProductIds == null || topProductIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Long> productIds = topProductIds.stream()
+                                             .map(id -> Long.valueOf(id.toString()))
+                                             .collect(Collectors.toList());
+
+        return productRepository.findAllById(productIds);
     }
 }
