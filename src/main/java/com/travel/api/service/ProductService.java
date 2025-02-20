@@ -28,7 +28,7 @@ public class ProductService {
     @Value("${ranking.key}")
     private String RANKING_KEY;
 
-    @Value("${event.key_prefix}")
+    @Value("${event.key.prefix}")
     private String EVENT_KEY_PREFIX;
 
     @Autowired
